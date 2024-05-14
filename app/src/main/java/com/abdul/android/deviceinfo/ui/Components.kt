@@ -92,7 +92,7 @@ fun TargetApiItem(item: TargetApi){
                 .fillMaxHeight()
                 .padding(3.dp)
                 .clickable { },
-            onClick = { /*TODO*/ },
+            onClick = {  },
             label = { Text(text = item.totalApps.toString()) }
         )
 
@@ -146,7 +146,7 @@ fun StorageItem(
                 .padding(5.dp)
                 .clickable { }
                 .align(Alignment.CenterVertically),
-            onClick = { /*TODO*/ },
+            onClick = {  },
             label = {
                 Text(
                     text = value,
