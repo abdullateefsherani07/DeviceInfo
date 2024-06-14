@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -82,7 +84,11 @@ fun InstalledAppsHomeScreen(viewModelStoreOwner: ViewModelStoreOwner, navigateTo
                         filterValue = item
                     },
                     label = { Text(text = item) },
-                    modifier = Modifier.padding(6.dp, 0.dp)
+                    modifier = Modifier.padding(6.dp, 0.dp),
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimary
+                    )
                 )
             }
         }

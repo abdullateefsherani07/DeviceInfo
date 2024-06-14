@@ -2,10 +2,12 @@ package com.abdul.android.deviceinfo.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -18,13 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import com.abdul.android.deviceinfo.home.apps.InstalledAppsHomeScreen
-import com.abdul.android.deviceinfo.home.cpu.ProcessorDetailsHomeScreen
-import com.abdul.android.deviceinfo.home.device.DeviceDetailsHomeScreen
+import com.abdul.android.deviceinfo.home.cpu.ProcessorDetailsScreen
+import com.abdul.android.deviceinfo.home.device.DeviceDetailsScreen
 import com.abdul.android.deviceinfo.home.apps.SimpleAppDetails
-import com.abdul.android.deviceinfo.home.battery.BatteryDetailsHomeScreen
-import com.abdul.android.deviceinfo.home.display.DisplayDetailsHomeScreen
-import com.abdul.android.deviceinfo.home.storage.StorageDetailsHomeScreen
-import com.abdul.android.deviceinfo.home.system.SystemDetailsHomeScreen
+import com.abdul.android.deviceinfo.home.battery.BatteryDetailsScreen
+import com.abdul.android.deviceinfo.home.display.DisplayDetailsScreen
+import com.abdul.android.deviceinfo.home.storage.StorageDetailsScreen
+import com.abdul.android.deviceinfo.home.system.SystemDetailsScreen
 
 data class TabItem(
     val title: String,
@@ -33,7 +35,7 @@ data class TabItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DeviceInfoHomeScreen(viewModelStoreOwner: ViewModelStoreOwner, navigateToAppDetails: (SimpleAppDetails) -> Unit){
+fun DeviceInfoHome(viewModelStoreOwner: ViewModelStoreOwner, navigateToAppDetails: (SimpleAppDetails) -> Unit){
 
     val tabItems = listOf(
         TabItem("Apps"),
@@ -49,10 +51,14 @@ fun DeviceInfoHomeScreen(viewModelStoreOwner: ViewModelStoreOwner, navigateToApp
         mutableIntStateOf(0)
     }
 
-    Column() {
+    Column(
+        modifier = Modifier
+            .background(color = MaterialTheme.colorScheme.primaryContainer)
+    ) {
         ScrollableTabRow(
             selectedTabIndex = selectedTabItem,
-            edgePadding = 0.dp
+            edgePadding = 0.dp,
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ) {
             tabItems.forEachIndexed { index, tabItem ->
                 Tab(
@@ -73,22 +79,22 @@ fun DeviceInfoHomeScreen(viewModelStoreOwner: ViewModelStoreOwner, navigateToApp
                     )
                 }
                 1 -> {
-                    DeviceDetailsHomeScreen(viewModelStoreOwner = viewModelStoreOwner)
+                    DeviceDetailsScreen(viewModelStoreOwner = viewModelStoreOwner)
                 }
                 2 -> {
-                    SystemDetailsHomeScreen(viewModelStoreOwner = viewModelStoreOwner)
+                    SystemDetailsScreen(viewModelStoreOwner = viewModelStoreOwner)
                 }
                 3 -> {
-                    ProcessorDetailsHomeScreen(viewModelStoreOwner = viewModelStoreOwner)
+                    ProcessorDetailsScreen(viewModelStoreOwner = viewModelStoreOwner)
                 }
                 4 -> {
-                    BatteryDetailsHomeScreen(viewModelStoreOwner = viewModelStoreOwner)
+                    BatteryDetailsScreen(viewModelStoreOwner = viewModelStoreOwner)
                 }
                 5 -> {
-                    StorageDetailsHomeScreen(viewModelStoreOwner = viewModelStoreOwner)
+                    StorageDetailsScreen(viewModelStoreOwner = viewModelStoreOwner)
                 }
                 6 -> {
-                    DisplayDetailsHomeScreen(viewModelStoreOwner = viewModelStoreOwner)
+                    DisplayDetailsScreen(viewModelStoreOwner = viewModelStoreOwner)
                 }
 //                7 -> RamInfoScreen(viewModelStoreOwner = viewModelStoreOwner)
                 else -> {

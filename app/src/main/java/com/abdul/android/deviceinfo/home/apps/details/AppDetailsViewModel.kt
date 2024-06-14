@@ -16,7 +16,7 @@ class AppDetailsViewModel(application: Application): AndroidViewModel(applicatio
     var appDetailsState: State<AppDetailsState> = _appDetailsState
 
     private val repository = AppDetailsRepository(application)
-    private var appDetails by mutableStateOf<AppDetails?>(AppDetails(null, null, null, null, null, null, null, null))
+    private var appDetails by mutableStateOf<AppDetails?>(null)
         private set
 
     private fun loadAppDetails(packageName: String){
@@ -43,6 +43,10 @@ class AppDetailsViewModel(application: Application): AndroidViewModel(applicatio
 
     fun fetchAppDetails(packageName: String){
         loadAppDetails(packageName)
+    }
+
+    fun updateState(){
+        _appDetailsState.value = AppDetailsState()
     }
 
     data class AppDetailsState(

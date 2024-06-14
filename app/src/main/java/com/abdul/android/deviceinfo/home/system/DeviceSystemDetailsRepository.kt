@@ -1,14 +1,17 @@
 package com.abdul.android.deviceinfo.home.system
 
+import android.content.Context
+import android.opengl.GLES10
 import android.os.Build
 import android.util.Log
 import com.abdul.android.deviceinfo.models.UserDeviceDetailsProperty
+import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Locale
 import java.util.TimeZone
 
-class DeviceSystemDetailsRepository() {
+class DeviceSystemDetailsRepository(private val context: Context) {
     suspend fun getDeviceSystemDetails(): List<UserDeviceDetailsProperty?> {
         return withContext(Dispatchers.IO){
             val deviceSystemDetails = mutableListOf<UserDeviceDetailsProperty?>(null)
@@ -35,6 +38,9 @@ class DeviceSystemDetailsRepository() {
                 deviceSystemDetails.add(language)
                 val timezone = UserDeviceDetailsProperty("Timezone", TimeZone.getDefault().id)
                 deviceSystemDetails.add(timezone)
+                val googlePlayServicesInfo = context.packageManager.getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0)
+                val googlePlayServices = UserDeviceDetailsProperty("Google Play Services", googlePlayServicesInfo.versionName)
+                deviceSystemDetails.add(googlePlayServices)
                 deviceSystemDetails
             } catch (e: Exception){
                 Log.e("DeviceSystemDetailsRepository", e.message!!)

@@ -16,11 +16,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.abdul.android.deviceinfo.ui.CustomPieChart
-import com.abdul.android.deviceinfo.ui.FilledSliceDrawer
-import com.abdul.android.deviceinfo.ui.Pies
-import com.abdul.android.deviceinfo.ui.Slice
-import com.abdul.android.deviceinfo.ui.StorageItem
+import com.abdul.android.deviceinfo.ui.components.CustomPieChart
+import com.abdul.android.deviceinfo.ui.components.FilledSliceDrawer
+import com.abdul.android.deviceinfo.ui.components.Pies
+import com.abdul.android.deviceinfo.ui.components.Slice
+import com.abdul.android.deviceinfo.ui.StorageListItem
 
 @Composable
 fun PlatformsScreen(viewModelStoreOwner: ViewModelStoreOwner) {
@@ -99,7 +99,7 @@ fun PlatformsScreen(viewModelStoreOwner: ViewModelStoreOwner) {
                                     val value = "${it.used}"
                                     val progress = percentage.toFloat()
                                     ElevatedCard(modifier = Modifier.padding(8.dp)) {
-                                        StorageItem(
+                                        StorageListItem(
                                             modifier = Modifier.padding(5.dp),
                                             title = title,
                                             value = value,

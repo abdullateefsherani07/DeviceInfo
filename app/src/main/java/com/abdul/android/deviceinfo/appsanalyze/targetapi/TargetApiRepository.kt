@@ -30,7 +30,7 @@ class TargetApiRepository(private val context: Context) {
                 }
                 for ((api, count) in apiCountMap){
                     val targetApi = StorageDetails("API $api", totalApps.toLong(), count.toLong())
-//                    Log.e("TargetApiRepository", "Version Name: ${targetApi.versionCode} API: ${targetApi.api}, Total Apps: ${targetApi.totalApps}")
+                    Log.e("TargetApiRepository", "API: $api, Total Apps: $count")
                     targetApiList.add(targetApi)
                 }
                 targetApiList.sortedByDescending { it.name.replace("API ", "").toInt() }

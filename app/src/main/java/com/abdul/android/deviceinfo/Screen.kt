@@ -5,4 +5,5 @@ sealed class Screen(var route: String) {
     object DeviceInfoHomeScreen: Screen("deviceinfohomescreen")
     object InstalledAppsScreen: Screen("installedappsscreen")
     object AppDetails: Screen("appdetails")
+    object AppPermissionsScreen: Screen("apppermissionsscreen")
 }

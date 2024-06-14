@@ -15,7 +15,7 @@ class DeviceSystemDetailsViewModel(application: Application): AndroidViewModel(a
     private val _deviceSystemDetailsState = mutableStateOf(DeviceSystemDetailsState())
     var deviceSystemDetailsState: State<DeviceSystemDetailsState> = _deviceSystemDetailsState
 
-    private val repository = DeviceSystemDetailsRepository()
+    private val repository = DeviceSystemDetailsRepository(application)
     private var deviceSystemDetails by mutableStateOf<List<UserDeviceDetailsProperty?>?>(null)
 
     init {

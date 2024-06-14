@@ -8,11 +8,12 @@ import android.os.BatteryManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.abdul.android.deviceinfo.home.DeviceDetailsRepository
 import com.abdul.android.deviceinfo.models.UserDeviceDetailsProperty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class DeviceBatteryDetailsRepository(private val context: Context) {
+class DeviceBatteryDetailsRepository(private val context: Context): DeviceDetailsRepository() {
 
     suspend fun getBatteryDetails(): List<UserDeviceDetailsProperty?> {
         return withContext(Dispatchers.IO){

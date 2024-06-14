@@ -25,7 +25,7 @@ class StorageDetailsViewModel(application: Application): AndroidViewModel(applic
 
     init {
         loadStorageDetails()
-        loadStorageCategoryDetails()
+//        loadStorageCategoryDetails()
     }
 
     private fun loadStorageDetails(){

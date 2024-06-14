@@ -1,6 +1,5 @@
 package com.abdul.android.deviceinfo.ui
 
-import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,48 +16,39 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import com.abdul.android.deviceinfo.R
 import com.abdul.android.deviceinfo.home.apps.SimpleAppDetails
 import com.abdul.android.deviceinfo.appsanalyze.targetapi.TargetApi
-import com.abdul.android.deviceinfo.models.StorageDetails
-import com.abdul.android.deviceinfo.models.UserDeviceDetailsProperty
+import com.abdul.android.deviceinfo.home.apps.details.appcomponents.SimpleComponent
 import java.text.DecimalFormat
-
-@Composable
-fun UserDeviceDetailsItem(item: UserDeviceDetailsProperty){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(5.dp)) {
-        Text(
-            modifier = Modifier.padding(2.dp),
-            text = item.key,
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            modifier = Modifier.padding(2.dp),
-            text = item.value,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
 
 @Composable
 fun TargetApiItem(item: TargetApi){
@@ -101,7 +91,7 @@ fun TargetApiItem(item: TargetApi){
 }
 
 @Composable
-fun StorageItem(
+fun StorageListItem(
     modifier: Modifier,
     title: String,
     subtitle: String? = null,
@@ -109,7 +99,12 @@ fun StorageItem(
     progress: Float
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().then(modifier)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp, 2.dp)
+            .then(modifier)
+            .background(color = MaterialTheme.colorScheme.background)
+            .padding(5.dp)
     ){
         Column(
             modifier = Modifier
@@ -160,25 +155,19 @@ fun StorageItem(
 
 }
 
-private fun formatBytes(bytes: Long): String{
-    val units = arrayOf("B", "KB", "MB", "GB", "TB")
-    var remainingBytes = bytes.toDouble()
-    var index = 0
-    while (remainingBytes >= 1024 && index < units.size -1) {
-        remainingBytes /= 1024
-        index++
-    }
-    return String.format("%.2f%s", remainingBytes, units[index])
-}
-
 @Composable
-fun InstalledApp(installedApp: SimpleAppDetails, navigateToAppDetails: (SimpleAppDetails) -> Unit){
+fun InstalledApp(
+    installedApp: SimpleAppDetails,
+    navigateToAppDetails: (SimpleAppDetails) -> Unit,
+    modifier: Modifier = Modifier
+){
     val logo = installedApp.icon.toBitmap(width = 100, height = 100).asImageBitmap()
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp, 3.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .padding(8.dp, 2.dp)
+            .then(modifier)
+            .background(color = MaterialTheme.colorScheme.background)
             .clickable { navigateToAppDetails(installedApp) },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -202,9 +191,106 @@ fun InstalledApp(installedApp: SimpleAppDetails, navigateToAppDetails: (SimpleAp
 
 }
 
+@Composable
+fun AppComponentListItem(
+    permission: SimpleComponent,
+    modifier: Modifier = Modifier
+){
+    val showDialog = remember {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+    val logo: ImageBitmap = if (permission.icon != null) {
+        permission.icon.
+        toBitmap(width = 50, height = 50).asImageBitmap()
+    } else {
+        context.getDrawable(R.drawable.ic_approval)!!.
+        toBitmap(width = 50, height = 50).asImageBitmap()
+    }
+
+    val logoPainter = painterResource(id = R.drawable.ic_approval)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp, 2.dp)
+            .then(modifier)
+            .background(color = MaterialTheme.colorScheme.background)
+            .clickable { showDialog.value = true },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(8.dp)
+                .background(
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    RoundedCornerShape(27)
+                )
+                .clip(RoundedCornerShape(27))
+                .padding(8.dp),
+            painter = logoPainter,
+            contentDescription = null
+        )
+
+        Column {
+            Text(
+                text = permission.label,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
+            )
+            Text(
+                text = permission.componentPackage,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 1.dp, bottom = 3.dp)
+            )
+        }
+
+    }
+
+    if (showDialog.value) {
+        CustomAlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            onConfirmation = { showDialog.value = false },
+            dialogTitle = permission.label,
+            dialogText = permission.description,
+            icon = Icons.Default.Info
+        )
+    }
+
+}
 
 @Composable
-fun PieChart(
+fun CustomAlertDialog(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+    icon: ImageVector
+) {
+    AlertDialog(
+        icon = {
+            Icon(imageVector = icon, contentDescription = "")
+        },
+        title = {
+            Text(text = dialogTitle)
+        },
+        onDismissRequest = { onDismissRequest() },
+        confirmButton = {
+            TextButton(onClick = { onConfirmation() }) {
+                Text(text = "Ok")
+            }
+        },
+        text = {
+            Text(text = dialogText)
+        }
+    )
+}
+
+
+@Composable
+fun CustomPieChart(
     data: Map<String, Int>,
     total: Long,
     radiusOuter: Dp = 60.dp,
@@ -378,7 +464,7 @@ fun DetailsPieChartItem(
 @Preview(showBackground = true)
 @Composable
 fun PieChartPreview() {
-    PieChart(
+    CustomPieChart(
         data = mapOf(
             Pair("Sample-1", 150),
             Pair("Sample-2", 120),
